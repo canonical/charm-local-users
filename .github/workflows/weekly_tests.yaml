@@ -1,0 +1,23 @@
+name: Weekly Tests
+
+on:
+  schedule:
+    - cron: "0 0 * * SAT"
+
+jobs:
+  run-tests:
+    uses: ./.github/workflows/check.yaml
+
+  notify-on-failure:
+    needs: run-tests
+    if: ${{ failure() }}
+    name: Notify Mattermost Channel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create the Mattermost Message
+        run: |
+          echo "{\"text\":\":robot_face: Weekly test has failed for project \`${{ github.repository }}\`\"}" > mattermost.json
+
+      - uses: mattermost/action-mattermost-notify@master
+        env:
+          MATTERMOST_WEBHOOK_URL: ${{ secrets.MATTERMOST_WEBHOOK_URL }}
