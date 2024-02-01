@@ -1,4 +1,5 @@
 """Utilities to be used during charm-local-users functests."""
+
 import logging
 
 from cryptography.hazmat.primitives.asymmetric import rsa
