@@ -1,4 +1,5 @@
 """Functional tests for charm-local-users."""
+
 from subprocess import run
 from time import sleep
 from tempfile import NamedTemporaryFile
