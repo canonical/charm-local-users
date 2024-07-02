@@ -26,14 +26,21 @@ jobs:
       tox-version: "<4"
 
   func:
-    uses: canonical/bootstack-actions/.github/workflows/func.yaml@v2
+    uses: canonical/bootstack-actions/.github/workflows/func.yaml@arm64-poc
     needs: lint-unit
     strategy:
       fail-fast: false
       matrix:
         include:
           - juju-channel: "3.4/stable"
-            command: "TEST_JUJU3=1 make functional"  # using TEST_JUJU3 due https://github.com/openstack-charmers/zaza/commit/af7eea953dd5d74d3d074fe67b5765dca3911ca6
+            command: "TEST_JUJU3=1 make functional"
+            runs-on: "['Ubuntu_ARM64_4C_16G_01']"
+            model-constraints: "arch=arm64"
+          - juju-channel: "3.4/stable"
+            command: "TEST_JUJU3=1 make functional"
+            runs-on: "['ubuntu-latest']"
+            model-constraints: ""
+            
     with:
       command: ${{ matrix.command }}
       juju-channel: ${{ matrix.juju-channel }}
@@ -41,3 +48,5 @@ jobs:
       provider: "lxd"
       python-version: "3.10"
       timeout-minutes: 120
+      runs-on: ${{ matrix.runs-on }}
+      model-constraints: ${{ matrix.model-constraints }}
