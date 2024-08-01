@@ -35,10 +35,9 @@ jobs:
         # This is fine right now because the charm only has a single build per architecture,
         # so only one will be built here.
       - name: Upload charm to charmhub
-        uses: canonical/charming-actions/upload-charm@2.4.0
+        uses: canonical/charming-actions/upload-charm@2.6.2
         with:
           credentials: "${{ secrets.CHARMHUB_TOKEN }}"
           github-token: "${{ secrets.GITHUB_TOKEN }}"
-          channel: "latest/edge"
-          # Ensure the charm is built on the correct base in an lxd container.
+          # Ensure the charm is built in an isolated environment and on the correct base in an lxd container.
           destructive-mode: false
