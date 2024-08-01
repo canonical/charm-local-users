@@ -37,8 +37,11 @@ jobs:
         architecture:
           - runs-on: [ubuntu-latest]  # github hosted runners are amd64
             model-constraints: ""
-            # TODO: should we use these or the Ubuntu_ARM64_4C_16G_01 github-hosted runner?
-          - runs-on: [self-hosted, jammy, ARM64]
+            # Ubuntu_ARM64_4C_16G_01 is the github-hosted arm64 runner we have access to.
+            # We prefer the github runners because they are smaller machines and save resources.
+            # If we have issues with it, we can switch to the larger and more numerous self-hosted options:
+            # - runs-on: [self-hosted, jammy, ARM64]
+          - runs-on: [Ubuntu_ARM64_4C_16G_01]
             model-constraints: arch=arm64
     steps:
 
