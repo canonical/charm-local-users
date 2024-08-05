@@ -10,8 +10,11 @@ Create and activate a virtualenv with the development requirements:
 
 ## Building
 
+This charm build config supports charmcraft v2.
+
 Run:
 
+    sudo snap install charmcraft --channel 2.x/stable --classic
     charmcraft pack
 
 ## Deploying local version
