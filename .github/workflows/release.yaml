@@ -60,6 +60,10 @@ jobs:
           sudo lxd init --auto
 
           sudo iptables -L
+          which docker || true
+
+          sudo nft list tables || true
+          sudo nft list tables || true
 
           if sudo iptables -L DOCKER-USER; then
             sudo iptables -I DOCKER-USER -i lxdbr0 -j ACCEPT
