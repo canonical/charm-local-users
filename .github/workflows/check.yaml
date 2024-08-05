@@ -76,11 +76,6 @@ jobs:
           juju version
           juju controllers | grep Version -A 1 | awk '{print $9}'
 
-      - name: Show charmcraft information
-        run: |
-          snap list charmcraft
-          charmcraft --version
-
       - name: Run tests
         run: "make functional"
         env:
