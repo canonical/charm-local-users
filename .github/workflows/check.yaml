@@ -44,6 +44,9 @@ jobs:
         with:
           submodules: true
 
+      - name: Install dependencies
+        run: sudo apt install -y make
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
