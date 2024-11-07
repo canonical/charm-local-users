@@ -3,29 +3,27 @@ parts:
   charm:
     charm-python-packages: [setuptools<58]
 bases:
-    - build-on:
-        - name: ubuntu
-          channel: "22.04"
-          architectures: ["amd64"]
-      run-on:
-        - name: ubuntu
-          channel: "22.04"
-          architectures:
-              - amd64
-        - name: ubuntu
-          channel: "20.04"
-          architectures:
-              - amd64
-    - build-on:
-        - name: ubuntu
-          channel: "22.04"
-          architectures: ["arm64"]
-      run-on:
-        - name: ubuntu
-          channel: "22.04"
-          architectures:
-              - arm64
-        - name: ubuntu
-          channel: "20.04"
-          architectures:
-              - arm64
+  - name: ubuntu
+    channel: "22.04"
+    architectures: [amd64]
+  - name: ubuntu
+    channel: "22.04"
+    architectures: [arm64]
+  - name: ubuntu
+    channel: "22.04"
+    architectures: [ppc64el]
+  - name: ubuntu
+    channel: "22.04"
+    architectures: [s390x]
+  - name: ubuntu
+    channel: "20.04"
+    architectures: [amd64]
+  - name: ubuntu
+    channel: "20.04"
+    architectures: [arm64]
+  - name: ubuntu
+    channel: "20.04"
+    architectures: [ppc64el]
+  - name: ubuntu
+    channel: "20.04"
+    architectures: [s390x]
