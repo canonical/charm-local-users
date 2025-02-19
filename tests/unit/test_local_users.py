@@ -60,9 +60,7 @@ class TestLocalUsers(unittest.TestCase):
             )
         )
         self.assertFalse(
-            local_users._path_under_user_home(
-                path=Path("/etc/ssh"), username="testuser"
-            )
+            local_users._path_under_user_home(path=Path("/etc/ssh"), username="testuser")
         )
         self.assertFalse(
             local_users._path_under_user_home(
@@ -73,9 +71,7 @@ class TestLocalUsers(unittest.TestCase):
     @patch("shutil.chown")
     @patch("pathlib.Path.chmod")
     @patch("pwd.getpwnam")
-    def test_set_ssh_authorized_keys_update(
-        self, mock_getpwnam, mock_chmod, *args, **kwargs
-    ):
+    def test_set_ssh_authorized_keys_update(self, mock_getpwnam, mock_chmod, *args, **kwargs):
         testuser = local_users.User(
             "testuser", ["Test User", "", "", "", ""], ["ssh-rsa ABC testuser@testhost"]
         )
@@ -93,9 +89,7 @@ class TestLocalUsers(unittest.TestCase):
             local_users.set_ssh_authorized_keys(testuser, "$HOME/.ssh/authorized_keys")
             with open(testfile_path, "r") as f:
                 keys = f.readlines()
-                self.assertIn(
-                    "ssh-rsa ABC testuser@testhost # charm-local-users\n", keys
-                )
+                self.assertIn("ssh-rsa ABC testuser@testhost # charm-local-users\n", keys)
 
             mock_chmod.assert_has_calls(
                 [
@@ -109,20 +103,14 @@ class TestLocalUsers(unittest.TestCase):
             local_users.set_ssh_authorized_keys(testuser2, "$HOME/.ssh/authorized_keys")
             with open(testfile_path, "r") as f:
                 keys = f.readlines()
-                self.assertIn(
-                    "ssh-rsa XYZ testuser@testhost # charm-local-users\n", keys
-                )
-                self.assertNotIn(
-                    "ssh-rsa ABC testuser@testhost # charm-local-users\n", keys
-                )
+                self.assertIn("ssh-rsa XYZ testuser@testhost # charm-local-users\n", keys)
+                self.assertNotIn("ssh-rsa ABC testuser@testhost # charm-local-users\n", keys)
 
             mock_chmod.assert_has_calls([call(mode=0o700), call(mode=0o600)])
 
     @patch("pathlib.Path.chmod")
     @patch("pwd.getpwnam")
-    def test_set_ssh_authorized_keys_in_etc(
-        self, mock_getpwnam, mock_chmod, *args, **kwargs
-    ):
+    def test_set_ssh_authorized_keys_in_etc(self, mock_getpwnam, mock_chmod, *args, **kwargs):
         testuser = local_users.User(
             "testuser", ["Test User", "", "", "", ""], ["ssh-rsa ABC testuser@testhost"]
         )
@@ -140,17 +128,13 @@ class TestLocalUsers(unittest.TestCase):
                 )
             )
 
-            testfile_path = os.path.join(
-                fake_etc, "ssh", "user-authorized-keys", "testuser"
-            )
+            testfile_path = os.path.join(fake_etc, "ssh", "user-authorized-keys", "testuser")
             local_users.set_ssh_authorized_keys(
                 testuser, f"{fake_etc}/ssh/user-authorized-keys/$USER"
             )
             with open(testfile_path, "r") as f:
                 keys = f.readlines()
-                self.assertIn(
-                    "ssh-rsa ABC testuser@testhost # charm-local-users\n", keys
-                )
+                self.assertIn("ssh-rsa ABC testuser@testhost # charm-local-users\n", keys)
         mock_chmod.assert_called_once_with(mode=0o644)
 
     def test_check_lp_user(self):
@@ -250,9 +234,7 @@ class TestLocalUsers(unittest.TestCase):
 
     def test_update_gecos(self):
         # ensure that only fields that changed are passed to chfn
-        testcase = namedtuple(
-            "testcase", ["prev", "updated", "expected", "should_call"]
-        )
+        testcase = namedtuple("testcase", ["prev", "updated", "expected", "should_call"])
 
         # NOTE: order of chfn flags in GECOS fields order is: -f -r -w -h -o
         testcases = [
