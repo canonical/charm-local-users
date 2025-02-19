@@ -111,9 +111,7 @@ class CharmLocalUsersCharm(CharmBase):
             if is_unmanaged_user(user.name, group):
                 unmanaged_users.append(user.name)
         if len(unmanaged_users) > 0:
-            msg = "users {} already exist and are not members of {}".format(
-                unmanaged_users, group
-            )
+            msg = "users {} already exist and are not members of {}".format(unmanaged_users, group)
             if not self.config["allow-existing-users"]:
                 log.error(msg)
                 self.unit.status = BlockedStatus(msg)
@@ -148,7 +146,9 @@ class CharmLocalUsersCharm(CharmBase):
 
     def prepare_users(self, users: list) -> list:
         """Return prepared user list from users config.
-        Return error message string on error"""
+
+        Return error message string on error.
+        """
         usernames = []
         userlist = []
         user_objects = {}

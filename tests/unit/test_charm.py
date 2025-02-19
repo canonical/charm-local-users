@@ -83,9 +83,7 @@ class TestCharm(unittest.TestCase):
         mock_exists.return_value = False
 
         # empty users list
-        self.harness.update_config(
-            {"group": "testgroup", "users": ";User with no name;\n"}
-        )
+        self.harness.update_config({"group": "testgroup", "users": ";User with no name;\n"})
 
         # a new group must be created
         mock_add_group.assert_called_once_with("testgroup")

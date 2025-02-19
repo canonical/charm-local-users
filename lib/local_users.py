@@ -87,7 +87,6 @@ def get_user_membership(username):
 
 def is_unmanaged_user(username, expected_group):
     """Test whether this user exists but doesn't belong to the `expected_group`."""
-
     if host.user_exists(username):
         groups = get_user_membership(username)
 
@@ -117,7 +116,6 @@ def remove_group(group_name):
 
 def rename_group(old_name, new_name):
     """Rename the `old_name` group to `new_name` using `groupmod` command."""
-
     if old_name != new_name:
         cmd = ["groupmod", "-n", new_name, old_name]
         subprocess.check_call(cmd)
@@ -144,16 +142,16 @@ def _path_under_user_home(path: Path, username: Text) -> bool:
 
 
 def is_lp_user(ssh_key_input):
-    """Check if input is an ssh key or a launchpad user"""
+    """Check if input is an ssh key or a launchpad user."""
     return str(ssh_key_input).startswith("lp:")
 
 
 def get_lp_ssh_keys(lp_user):
-    """
+    """Get SSH keys from launchpad for a launchpad user.
+
     Returns list of SSH key(s) for the launchpad user.
     Returns None in case user doesn't exist.
     """
-
     cmd = ["ssh-import-id", "-o", "-", lp_user]
     try:
         process = subprocess.run(cmd, capture_output=True, check=True, text=True)
@@ -179,9 +177,7 @@ def set_ssh_authorized_keys(user, authorized_keys_path):
         authorized_key = " ".join([ssh_key, comment])
         authorized_keys.append(authorized_key)
 
-    authorized_keys_path = _substitute_path_vars_for_user(
-        Path(authorized_keys_path), user.name
-    )
+    authorized_keys_path = _substitute_path_vars_for_user(Path(authorized_keys_path), user.name)
     ssh_path = authorized_keys_path.parent
     ssh_path_under_user_home = _path_under_user_home(ssh_path, user.name)
 
@@ -275,9 +271,7 @@ def check_sudoers_file(sudoers):
     sudoers_file.close()
     check_cmd = "visudo -c -f {}".format(sudoers_file.name)
     log.debug("Checking sudoers file: {}".format(check_cmd))
-    run = subprocess.run(
-        check_cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE
-    )
+    run = subprocess.run(check_cmd.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     log.debug("Stdout: {}, Stderr: {}".format(run.stdout, run.stderr))
     log.debug("Cleaning up {}".format(sudoers_file.name))
     os.remove(sudoers_file.name)
