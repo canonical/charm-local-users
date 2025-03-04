@@ -1,9 +1,10 @@
 charm_name: local-users
 gate_bundles:
+  - noble
   - jammy
   - focal
 dev_bundles:
-  - jammy
+  - noble
 tests:
   - tests.test_local_users.TestLocalUsers
 target_deploy_status:
