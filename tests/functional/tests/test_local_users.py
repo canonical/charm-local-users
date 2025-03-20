@@ -1,12 +1,11 @@
 """Functional tests for charm-local-users."""
 
-from subprocess import run
-from time import sleep
-from tempfile import NamedTemporaryFile
 import unittest
+from subprocess import run
+from tempfile import NamedTemporaryFile
+from time import sleep
 
 import zaza
-
 from tests.modules.utils import generate_keypair
 
 

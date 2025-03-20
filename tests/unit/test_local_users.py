@@ -17,9 +17,9 @@ import pwd
 import unittest
 from collections import namedtuple
 from pathlib import Path
+from subprocess import CalledProcessError, CompletedProcess
 from tempfile import TemporaryDirectory
 from unittest.mock import call, patch
-from subprocess import CompletedProcess, CalledProcessError
 
 from lib import local_users
 

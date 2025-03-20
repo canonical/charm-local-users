@@ -18,27 +18,26 @@
 import logging
 import os
 
-from ops.charm import CharmBase
-from ops.framework import StoredState
-from ops.main import main
-from ops.model import ActiveStatus, BlockedStatus
-
 from local_users import (
+    User,
     add_group,
-    configure_user,
     check_sudoers_file,
+    configure_user,
     delete_user,
     get_group_users,
+    get_lp_ssh_keys,
     group_exists,
+    is_lp_user,
     is_unmanaged_user,
     parse_gecos,
     remove_group,
     rename_group,
-    User,
     write_sudoers_file,
-    is_lp_user,
-    get_lp_ssh_keys,
 )
+from ops.charm import CharmBase
+from ops.framework import StoredState
+from ops.main import main
+from ops.model import ActiveStatus, BlockedStatus
 
 log = logging.getLogger(__name__)
 
@@ -56,9 +55,10 @@ class CharmLocalUsersCharm(CharmBase):
         self._stored.set_default(group="")
 
     def on_install(self, _):
+        """Run install hook."""
         self.unit.status = ActiveStatus()
 
-    def on_config_changed(self, _):
+    def on_config_changed(self, _):  # pylint: disable=too-many-locals,too-many-branches
         """Create and update system users and groups to match the config.
 
         Ensure that the charm managed group exists on the unit.
@@ -111,7 +111,7 @@ class CharmLocalUsersCharm(CharmBase):
             if is_unmanaged_user(user.name, group):
                 unmanaged_users.append(user.name)
         if len(unmanaged_users) > 0:
-            msg = "users {} already exist and are not members of {}".format(unmanaged_users, group)
+            msg = f"users {unmanaged_users} already exist and are not members of {group}"
             if not self.config["allow-existing-users"]:
                 log.error(msg)
                 self.unit.status = BlockedStatus(msg)
@@ -139,12 +139,11 @@ class CharmLocalUsersCharm(CharmBase):
             msg = "parse error in sudoers config, check juju debug-log for more information"
             self.unit.status = BlockedStatus(msg)
             return
-        else:
-            write_sudoers_file(sudoers)
 
+        write_sudoers_file(sudoers)
         self.unit.status = ActiveStatus()
 
-    def prepare_users(self, users: list) -> list:
+    def prepare_users(self, users: list) -> list:  # pylint: disable=too-many-locals
         """Return prepared user list from users config.
 
         Return error message string on error.
@@ -161,7 +160,7 @@ class CharmLocalUsersCharm(CharmBase):
             usernames.append(u[0])
 
         unique_users = list(set(usernames))
-        log.debug(f"List of users: {unique_users}")
+        log.debug("List of users: %s", unique_users)
 
         for username in unique_users:
             user_objects[username] = {}
