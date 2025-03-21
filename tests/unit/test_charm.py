@@ -15,9 +15,10 @@
 import unittest
 from unittest.mock import patch
 
-from src.charm import CharmLocalUsersCharm
 from ops.model import ActiveStatus, BlockedStatus
 from ops.testing import Harness
+
+from src.charm import CharmLocalUsersCharm
 
 
 class TestCharm(unittest.TestCase):
