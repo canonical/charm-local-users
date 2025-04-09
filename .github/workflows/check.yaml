@@ -133,6 +133,8 @@ jobs:
         runs-on: [[ubuntu-24.04], [Ubuntu_ARM64_4C_16G_01], [self-hosted, linux, s390x]]
         test-command: ['if [ "$(uname -m)" = "s390x" ]; then echo "skipping func tests on arch s390x"; else tox -e func; fi']
         juju-channel: ["3.4/stable"]
+        exclude:
+          - runs-on: [self-hosted, linux, s390x]  # setup-python action does not support s390x arch
     steps:
       - uses: actions/checkout@v4
         with:
