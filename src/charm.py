@@ -18,27 +18,26 @@
 import logging
 import os
 
-from ops.charm import CharmBase
-from ops.framework import StoredState
-from ops.main import main
-from ops.model import ActiveStatus, BlockedStatus
-
 from local_users import (
+    User,
     add_group,
-    configure_user,
     check_sudoers_file,
+    configure_user,
     delete_user,
     get_group_users,
+    get_lp_ssh_keys,
     group_exists,
+    is_lp_user,
     is_unmanaged_user,
     parse_gecos,
     remove_group,
     rename_group,
-    User,
     write_sudoers_file,
-    is_lp_user,
-    get_lp_ssh_keys,
 )
+from ops.charm import CharmBase
+from ops.framework import StoredState
+from ops.main import main
+from ops.model import ActiveStatus, BlockedStatus
 
 log = logging.getLogger(__name__)
 
