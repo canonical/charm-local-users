@@ -107,7 +107,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [[ubuntu-24.04], [ubuntu-24.04-arm], [self-hosted, linux, s390x],[self-hosted, ppc64el]]
+        runs-on: [[ubuntu-24.04-arm]]
     steps:
       - uses: actions/checkout@v6
         with:
@@ -144,7 +144,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [[ubuntu-24.04], [ubuntu-22.04-arm]]
+        runs-on: [[self-hosted, noble, ARM64]]
         test-command: ['tox -e func']
         juju-channel: ["3.6/stable"]
     steps:
@@ -188,6 +188,9 @@ jobs:
       - name: List the names of the downloaded charms
         run: |
           ls *.charm
+
+      - name: Setup tmate session
+        uses: canonical/action-tmate@main
 
       - name: Run tests
         run: |
