@@ -21,16 +21,19 @@ class SSDLCEvent(str, Enum):
 
     USER_CREATED = "user_created"
     USER_UPDATED = "user_updated"
+    USER_DELETED = "user_deleted"
 
 
 _EVENT_LEVELS = {
     SSDLCEvent.USER_CREATED: "WARN",
     SSDLCEvent.USER_UPDATED: "WARN",
+    SSDLCEvent.USER_DELETED: "WARN",
 }
 
 _EVENT_DESCRIPTIONS = {
     SSDLCEvent.USER_CREATED: "User created: %s",
     SSDLCEvent.USER_UPDATED: "User updated: %s",
+    SSDLCEvent.USER_DELETED: "User deleted: %s",
 }
 
 
