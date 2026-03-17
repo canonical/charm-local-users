@@ -21,11 +21,11 @@ class TestSSDLC(unittest.TestCase):
         log_ssdlc_event(SSDLCEvent.USER_CREATED, "alice", "SSH keys added")
 
         logged = mock_logger.warning.call_args[0][0]
-        assert logged["event"] == "user_created:alice"
-        assert logged["level"] == "WARN"
-        assert logged["appid"] == "charm.local-users"
-        assert logged["datetime"] == "2025-01-01T12:00:00+00:00"
-        assert logged["description"] == "User created: alice SSH keys added"
+        self.assertEqual(logged["event"], "user_created:alice")
+        self.assertEqual(logged["level"], "WARN")
+        self.assertEqual(logged["appid"], "charm.local-users")
+        self.assertEqual(logged["datetime"], "2025-01-01T12:00:00+00:00")
+        self.assertEqual(logged["description"], "User created: alice SSH keys added")
 
     @mock.patch("ssdlc.logger")
     @mock.patch("ssdlc.datetime")
@@ -37,10 +37,10 @@ class TestSSDLC(unittest.TestCase):
         log_ssdlc_event(SSDLCEvent.USER_UPDATED, "bob")
 
         logged = mock_logger.warning.call_args[0][0]
-        assert logged["event"] == "user_updated:bob"
-        assert logged["level"] == "WARN"
-        assert logged["appid"] == "charm.local-users"
-        assert logged["description"] == "User updated: bob"
+        self.assertEqual(logged["event"], "user_updated:bob")
+        self.assertEqual(logged["level"], "WARN")
+        self.assertEqual(logged["appid"], "charm.local-users")
+        self.assertEqual(logged["description"], "User updated: bob")
 
     @mock.patch("ssdlc.logger")
     @mock.patch("ssdlc.datetime")
@@ -54,7 +54,7 @@ class TestSSDLC(unittest.TestCase):
 
         logged = mock_logger.warning.call_args[0][0]
         # Verify ISO 8601 format with timezone
-        assert logged["datetime"] == "2025-01-15T14:30:45+00:00"
-        assert logged["event"] == "user_deleted:charlie"
-        assert logged["level"] == "WARN"
-        assert logged["description"] == "User deleted: charlie"
+        self.assertEqual(logged["datetime"], "2025-01-15T14:30:45+00:00")
+        self.assertEqual(logged["event"], "user_deleted:charlie")
+        self.assertEqual(logged["level"], "WARN")
+        self.assertEqual(logged["description"], "User deleted: charlie")

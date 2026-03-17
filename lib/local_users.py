@@ -78,6 +78,7 @@ def delete_user(username, backupdir):
     subprocess.check_call(cmd)
     log_ssdlc_event(SSDLCEvent.USER_DELETED, username)
 
+
 def get_user_membership(username):
     """Return the list of groups that the user is a member of."""
     cmd = ["groups", username]
