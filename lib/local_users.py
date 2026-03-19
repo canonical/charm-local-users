@@ -27,6 +27,7 @@ from pathlib import Path
 from typing import Text
 
 from charmhelpers.core import host
+from ssdlc import SSDLCEvent, log_ssdlc_event
 
 log = logging.getLogger(__name__)
 
@@ -48,6 +49,7 @@ def add_user(username, shell="/bin/bash", home_dir=None, gecos=None):
         cmd.extend(["--gecos", ",".join(gecos)])
     cmd.append(username)
     subprocess.check_call(cmd)
+    log_ssdlc_event(SSDLCEvent.USER_CREATED, username)
 
 
 def configure_user(user, group, authorized_keys_path):
@@ -67,12 +69,14 @@ def configure_user(user, group, authorized_keys_path):
     host.add_user_to_group(user.name, group)
     set_ssh_authorized_keys(user, authorized_keys_path)
     update_gecos(user)
+    log_ssdlc_event(SSDLCEvent.USER_UPDATED, user.name)
 
 
 def delete_user(username, backupdir):
     """Remove a user from the system."""
     cmd = ["deluser", "--remove-home", "--backup", "--backup-to", backupdir, username]
     subprocess.check_call(cmd)
+    log_ssdlc_event(SSDLCEvent.USER_DELETED, username)
 
 
 def get_user_membership(username):

@@ -291,3 +291,45 @@ class TestLocalUsers(unittest.TestCase):
             mock_call.return_value = b"acme:x:1001:"
             result = local_users.get_group_users("acme")
             self.assertListEqual(result, [])
+
+    @patch("lib.local_users.log_ssdlc_event")
+    @patch("subprocess.check_call")
+    def test_add_user_logs_user_created(self, mock_check_call, mock_ssdlc):
+        local_users.add_user("alice", gecos=["Alice", "", "", "", ""])
+        mock_ssdlc.assert_called_once_with(local_users.SSDLCEvent.USER_CREATED, "alice")
+
+    @patch("lib.local_users.log_ssdlc_event")
+    @patch("lib.local_users.update_gecos")
+    @patch("lib.local_users.set_ssh_authorized_keys")
+    @patch("charmhelpers.core.host.add_user_to_group")
+    @patch("charmhelpers.core.host.user_exists")
+    @patch("subprocess.check_call")
+    def test_configure_user_logs_user_updated(
+        self, mock_check_call, mock_user_exists, mock_add_group, mock_ssh, mock_gecos, mock_ssdlc
+    ):
+        mock_user_exists.return_value = True
+        user = local_users.User("bob", ["Bob", "", "", "", ""], ["ssh-rsa KEY"])
+        local_users.configure_user(user, "testgroup", "$HOME/.ssh/authorized_keys")
+        mock_ssdlc.assert_called_once_with(local_users.SSDLCEvent.USER_UPDATED, "bob")
+
+    @patch("lib.local_users.log_ssdlc_event")
+    @patch("lib.local_users.update_gecos")
+    @patch("lib.local_users.set_ssh_authorized_keys")
+    @patch("charmhelpers.core.host.add_user_to_group")
+    @patch("charmhelpers.core.host.user_exists")
+    @patch("subprocess.check_call")
+    def test_configure_new_user_logs_created_and_updated(
+        self, mock_check_call, mock_user_exists, mock_add_group, mock_ssh, mock_gecos, mock_ssdlc
+    ):
+        mock_user_exists.return_value = False
+        user = local_users.User("carol", ["Carol", "", "", "", ""], ["ssh-rsa KEY"])
+        local_users.configure_user(user, "testgroup", "$HOME/.ssh/authorized_keys")
+        mock_ssdlc.assert_any_call(local_users.SSDLCEvent.USER_CREATED, "carol")
+        mock_ssdlc.assert_any_call(local_users.SSDLCEvent.USER_UPDATED, "carol")
+        self.assertEqual(mock_ssdlc.call_count, 2)
+
+    @patch("lib.local_users.log_ssdlc_event")
+    @patch("subprocess.check_call")
+    def test_delete_user_logs_user_deleted(self, mock_check_call, mock_ssdlc):
+        local_users.delete_user("dave", "/backup")
+        mock_ssdlc.assert_called_once_with(local_users.SSDLCEvent.USER_DELETED, "dave")
